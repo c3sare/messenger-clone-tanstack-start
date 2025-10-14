@@ -1,0 +1,51 @@
+"use server";
+
+import { redirect } from "@tanstack/react-router";
+import { createServerFn } from "@tanstack/react-start";
+import { getRequest } from "@tanstack/react-start/server";
+import { eq } from "drizzle-orm";
+import * as z from "zod/mini";
+import { db } from "@/drizzle";
+import { conversation } from "@/drizzle/schema";
+import { pusherServer } from "@/lib/pusher";
+import getCurrentUser from "../getCurrentUser";
+
+export const deleteConversation = createServerFn()
+	.inputValidator(z.number())
+	.handler(async ({ data: conversationId }) => {
+		const currentUser = await getCurrentUser(getRequest());
+
+		const userId = currentUser?.id;
+
+		if (!userId) throw new Error("User not found");
+
+		const conversationdb = await db.query.conversation.findFirst({
+			where: {
+				id: conversationId,
+			},
+			with: {
+				user: true,
+			},
+		});
+
+		if (
+			(conversationdb?.isGroup && conversationdb.ownerId === userId) ||
+			(!conversationdb?.isGroup &&
+				conversationdb?.user.some((user) => user.id === userId))
+		) {
+			const deletedConversation = await db
+				.delete(conversation)
+				.where(eq(conversation.id, conversationId))
+				.returning();
+
+			pusherServer.trigger(
+				conversationdb.user.map((item) => item.id),
+				"conversation:remove",
+				deletedConversation.at(0),
+			);
+
+			return redirect({ to: "/conversations" });
+		} else {
+			throw new Error("You don't have permission to delete this conversation");
+		}
+	});

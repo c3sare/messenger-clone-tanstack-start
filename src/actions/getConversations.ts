@@ -1,8 +1,9 @@
+import { createServerFn } from "@tanstack/react-start";
 import { db } from "@/drizzle";
 import getCurrentUser from "./getCurrentUser";
 
-const getConversations = async (request: Request) => {
-	const currentUser = await getCurrentUser(request);
+const getConversations = createServerFn().handler(async () => {
+	const currentUser = await getCurrentUser();
 
 	const userId = currentUser?.id;
 
@@ -39,6 +40,6 @@ const getConversations = async (request: Request) => {
 		console.error(error);
 		return [];
 	}
-};
+});
 
 export default getConversations;

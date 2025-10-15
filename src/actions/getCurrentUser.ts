@@ -1,9 +1,10 @@
+import { getRequest } from "@tanstack/react-start/server";
 import { db } from "@/drizzle";
 import { auth } from "@/lib/auth";
 
-const getCurrentUser = async (request: Request) => {
+const getCurrentUser = async () => {
 	try {
-		const session = await auth.api.getSession(request);
+		const session = await auth.api.getSession(getRequest());
 
 		const userId = session?.user?.id;
 
@@ -16,6 +17,8 @@ const getCurrentUser = async (request: Request) => {
 				id: userId,
 			},
 		});
+
+		if (!currentUser) return null;
 
 		return currentUser;
 	} catch (error) {

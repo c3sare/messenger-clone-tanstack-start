@@ -1,6 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { db } from "@/drizzle";
-import { messageReads } from "@/drizzle/schema";
+import { messageRead } from "@/drizzle/schema";
 import { auth } from "@/lib/auth";
 import { pusherServer } from "@/lib/pusher";
 
@@ -20,17 +20,17 @@ const handler = async ({
 			return new Response("Unauthorized", { status: 401 });
 		}
 
-		const conversation = await db.query.conversations.findFirst({
+		const conversation = await db.query.conversation.findFirst({
 			where: {
 				id: conversationId,
 			},
 			with: {
-				messages: {
+				message: {
 					with: {
 						seenBy: true,
 					},
 				},
-				users: true,
+				user: true,
 			},
 		});
 
@@ -38,21 +38,21 @@ const handler = async ({
 			return new Response("Invalid ID", { status: 400 });
 		}
 
-		const lastMessage = conversation.messages.at(-1);
+		const lastMessage = conversation.message.at(-1);
 
 		if (!lastMessage) {
 			return Response.json(conversation);
 		}
 
 		await db
-			.insert(messageReads)
+			.insert(messageRead)
 			.values({
 				userId: currentUser.user.id,
 				messageId: lastMessage.id,
 			})
 			.onConflictDoNothing();
 
-		const message = await db.query.messages.findFirst({
+		const message = await db.query.message.findFirst({
 			where: {
 				id: lastMessage.id,
 			},

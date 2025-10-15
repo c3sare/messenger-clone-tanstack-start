@@ -2,7 +2,6 @@
 
 import { redirect } from "@tanstack/react-router";
 import { createServerFn } from "@tanstack/react-start";
-import { getRequest } from "@tanstack/react-start/server";
 import { eq } from "drizzle-orm";
 import * as z from "zod/mini";
 import { db } from "@/drizzle";
@@ -13,7 +12,7 @@ import getCurrentUser from "../getCurrentUser";
 export const deleteConversation = createServerFn()
 	.inputValidator(z.number())
 	.handler(async ({ data: conversationId }) => {
-		const currentUser = await getCurrentUser(getRequest());
+		const currentUser = await getCurrentUser();
 
 		const userId = currentUser?.id;
 
@@ -44,7 +43,7 @@ export const deleteConversation = createServerFn()
 				deletedConversation.at(0),
 			);
 
-			return redirect({ to: "/conversations" });
+			throw redirect({ to: "/conversations" });
 		} else {
 			throw new Error("You don't have permission to delete this conversation");
 		}

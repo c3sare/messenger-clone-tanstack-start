@@ -13,7 +13,6 @@ import { Route as IndexRouteImport } from './routes/index'
 import { Route as ApplicationSplatRouteImport } from './routes/_application/$'
 import { Route as ApplicationConversationsRouteRouteImport } from './routes/_application/conversations/route'
 import { Route as ApplicationConversationsIndexRouteImport } from './routes/_application/conversations/index'
-import { Route as ApiTrpcSplatRouteImport } from './routes/api/trpc/$'
 import { Route as ApiPusherSplatRouteImport } from './routes/api/pusher/$'
 import { Route as ApiAuthSplatRouteImport } from './routes/api/auth/$'
 import { Route as ApiConversationsChar123conversationIdChar125SeenRouteImport } from './routes/api/conversations/{$conversationId}/seen'
@@ -40,11 +39,6 @@ const ApplicationConversationsIndexRoute =
     path: '/',
     getParentRoute: () => ApplicationConversationsRouteRoute,
   } as any)
-const ApiTrpcSplatRoute = ApiTrpcSplatRouteImport.update({
-  id: '/api/trpc/$',
-  path: '/api/trpc/$',
-  getParentRoute: () => rootRouteImport,
-} as any)
 const ApiPusherSplatRoute = ApiPusherSplatRouteImport.update({
   id: '/api/pusher/$',
   path: '/api/pusher/$',
@@ -68,7 +62,6 @@ export interface FileRoutesByFullPath {
   '/$': typeof ApplicationSplatRoute
   '/api/auth/$': typeof ApiAuthSplatRoute
   '/api/pusher/$': typeof ApiPusherSplatRoute
-  '/api/trpc/$': typeof ApiTrpcSplatRoute
   '/conversations/': typeof ApplicationConversationsIndexRoute
   '/api/conversations/{$conversationId}/seen': typeof ApiConversationsChar123conversationIdChar125SeenRoute
 }
@@ -77,7 +70,6 @@ export interface FileRoutesByTo {
   '/$': typeof ApplicationSplatRoute
   '/api/auth/$': typeof ApiAuthSplatRoute
   '/api/pusher/$': typeof ApiPusherSplatRoute
-  '/api/trpc/$': typeof ApiTrpcSplatRoute
   '/conversations': typeof ApplicationConversationsIndexRoute
   '/api/conversations/{$conversationId}/seen': typeof ApiConversationsChar123conversationIdChar125SeenRoute
 }
@@ -88,7 +80,6 @@ export interface FileRoutesById {
   '/_application/$': typeof ApplicationSplatRoute
   '/api/auth/$': typeof ApiAuthSplatRoute
   '/api/pusher/$': typeof ApiPusherSplatRoute
-  '/api/trpc/$': typeof ApiTrpcSplatRoute
   '/_application/conversations/': typeof ApplicationConversationsIndexRoute
   '/api/conversations/{$conversationId}/seen': typeof ApiConversationsChar123conversationIdChar125SeenRoute
 }
@@ -100,7 +91,6 @@ export interface FileRouteTypes {
     | '/$'
     | '/api/auth/$'
     | '/api/pusher/$'
-    | '/api/trpc/$'
     | '/conversations/'
     | '/api/conversations/{$conversationId}/seen'
   fileRoutesByTo: FileRoutesByTo
@@ -109,7 +99,6 @@ export interface FileRouteTypes {
     | '/$'
     | '/api/auth/$'
     | '/api/pusher/$'
-    | '/api/trpc/$'
     | '/conversations'
     | '/api/conversations/{$conversationId}/seen'
   id:
@@ -119,7 +108,6 @@ export interface FileRouteTypes {
     | '/_application/$'
     | '/api/auth/$'
     | '/api/pusher/$'
-    | '/api/trpc/$'
     | '/_application/conversations/'
     | '/api/conversations/{$conversationId}/seen'
   fileRoutesById: FileRoutesById
@@ -130,7 +118,6 @@ export interface RootRouteChildren {
   ApplicationSplatRoute: typeof ApplicationSplatRoute
   ApiAuthSplatRoute: typeof ApiAuthSplatRoute
   ApiPusherSplatRoute: typeof ApiPusherSplatRoute
-  ApiTrpcSplatRoute: typeof ApiTrpcSplatRoute
   ApiConversationsChar123conversationIdChar125SeenRoute: typeof ApiConversationsChar123conversationIdChar125SeenRoute
 }
 
@@ -163,13 +150,6 @@ declare module '@tanstack/react-router' {
       fullPath: '/conversations/'
       preLoaderRoute: typeof ApplicationConversationsIndexRouteImport
       parentRoute: typeof ApplicationConversationsRouteRoute
-    }
-    '/api/trpc/$': {
-      id: '/api/trpc/$'
-      path: '/api/trpc/$'
-      fullPath: '/api/trpc/$'
-      preLoaderRoute: typeof ApiTrpcSplatRouteImport
-      parentRoute: typeof rootRouteImport
     }
     '/api/pusher/$': {
       id: '/api/pusher/$'
@@ -216,7 +196,6 @@ const rootRouteChildren: RootRouteChildren = {
   ApplicationSplatRoute: ApplicationSplatRoute,
   ApiAuthSplatRoute: ApiAuthSplatRoute,
   ApiPusherSplatRoute: ApiPusherSplatRoute,
-  ApiTrpcSplatRoute: ApiTrpcSplatRoute,
   ApiConversationsChar123conversationIdChar125SeenRoute:
     ApiConversationsChar123conversationIdChar125SeenRoute,
 }
@@ -225,10 +204,11 @@ export const routeTree = rootRouteImport
   ._addFileTypes<FileRouteTypes>()
 
 import type { getRouter } from './router.tsx'
-import type { createStart } from '@tanstack/react-start'
+import type { startInstance } from './start.ts'
 declare module '@tanstack/react-start' {
   interface Register {
     ssr: true
     router: Awaited<ReturnType<typeof getRouter>>
+    config: Awaited<ReturnType<typeof startInstance.getOptions>>
   }
 }

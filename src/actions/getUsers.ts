@@ -1,14 +1,13 @@
+import { createServerFn } from "@tanstack/react-start";
 import { db } from "@/drizzle";
-import { auth } from "@/lib/auth";
+import getCurrentUser from "./getCurrentUser";
 
-const getUsers = async (request: Request) => {
-	const session = await auth.api.getSession(request);
+const getUsers = createServerFn().handler(async () => {
+	const user = await getCurrentUser();
 
-	const userId = session?.user?.id;
+	if (!user) return [];
 
-	if (!userId) {
-		return [];
-	}
+	const userId = user.id;
 
 	try {
 		const user = await db.query.user.findMany({
@@ -27,6 +26,6 @@ const getUsers = async (request: Request) => {
 		console.error(error);
 		return [];
 	}
-};
+});
 
 export default getUsers;

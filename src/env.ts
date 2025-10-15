@@ -1,16 +1,16 @@
 import { createEnv } from "@t3-oss/env-core";
-import { z } from "zod";
+import * as z from "zod/mini";
 
 export const env = createEnv({
 	server: {
 		DATABASE_URL: z.url(),
-		BETTER_AUTH_SECRET: z.string().min(1),
-		AUTH_GOOGLE_ID: z.string().min(1),
-		AUTH_GOOGLE_SECRET: z.string().min(1),
-		AUTH_GITHUB_ID: z.string().min(1),
-		AUTH_GITHUB_SECRET: z.string().min(1),
-		PUSHER_APP_ID: z.string().min(1),
-		PUSHER_APP_SECRET: z.string().min(1),
+		BETTER_AUTH_SECRET: z.string().check(z.minLength(1)),
+		AUTH_GOOGLE_ID: z.string().check(z.minLength(1)),
+		AUTH_GOOGLE_SECRET: z.string().check(z.minLength(1)),
+		AUTH_GITHUB_ID: z.string().check(z.minLength(1)),
+		AUTH_GITHUB_SECRET: z.string().check(z.minLength(1)),
+		PUSHER_APP_ID: z.string().check(z.minLength(1)),
+		PUSHER_APP_SECRET: z.string().check(z.minLength(1)),
 	},
 
 	/**
@@ -20,10 +20,10 @@ export const env = createEnv({
 	clientPrefix: "VITE_",
 
 	client: {
-		VITE_PUSHER_APP_KEY: z.string().min(1),
-		VITE_PUSHER_APP_CLUSTER: z.string().min(1),
-		VITE_CLOUDINARY_CLOUD_NAME: z.string().min(1),
-		VITE_CLOUDINARY_UPLOAD_PRESET: z.string().min(1),
+		VITE_PUSHER_APP_KEY: z.string().check(z.minLength(1)),
+		VITE_PUSHER_APP_CLUSTER: z.string().check(z.minLength(1)),
+		VITE_CLOUDINARY_CLOUD_NAME: z.string().check(z.minLength(1)),
+		VITE_CLOUDINARY_UPLOAD_PRESET: z.string().check(z.minLength(1)),
 	},
 
 	/**

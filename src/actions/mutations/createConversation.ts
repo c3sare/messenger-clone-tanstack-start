@@ -1,7 +1,4 @@
-"use server";
-
 import { createServerFn } from "@tanstack/react-start";
-import { getRequest } from "@tanstack/react-start/server";
 import { and, eq, inArray, isNull, or, sql } from "drizzle-orm";
 import { revalidatePath } from "next/cache";
 import { db } from "@/drizzle";
@@ -13,7 +10,7 @@ import getCurrentUser from "../getCurrentUser";
 export const createConversation = createServerFn()
 	.inputValidator(createUserSchema)
 	.handler(async ({ data }) => {
-		const currentUser = await getCurrentUser(getRequest());
+		const currentUser = await getCurrentUser();
 
 		if (!currentUser) return false;
 

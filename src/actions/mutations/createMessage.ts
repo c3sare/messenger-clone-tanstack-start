@@ -1,7 +1,4 @@
-"use server";
-
 import { createServerFn } from "@tanstack/react-start";
-import { getRequest } from "@tanstack/react-start/server";
 import { eq } from "drizzle-orm";
 import { db } from "@/drizzle";
 import { conversation, message, messageRead } from "@/drizzle/schema";
@@ -14,7 +11,7 @@ export const createMessage = createServerFn()
 	.handler(async ({ data }) => {
 		const { conversationId, image, body } = data;
 
-		const currentUser = await getCurrentUser(getRequest());
+		const currentUser = await getCurrentUser();
 
 		const userId = currentUser?.id;
 

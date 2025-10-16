@@ -5,7 +5,7 @@ import { createConversation } from "@/actions/mutations/createConversation";
 import { FormInput } from "@/components/form/FormInput";
 import { FormMultiSelect } from "@/components/form/FormMultiSelect";
 import { Button } from "@/components/ui/button";
-import { Form } from "@/components/ui/form";
+import { FieldGroup } from "@/components/ui/field";
 import type { user } from "@/drizzle/schema";
 import { useValibotForm } from "@/hooks/useValibotForm";
 
@@ -30,37 +30,35 @@ const GroupChatModal: React.FC<GroupChatModalProps> = ({ users }) => {
 	});
 
 	return (
-		<Form {...form}>
-			<form onSubmit={onSubmit}>
-				<div className="space-y-12">
-					<div className="border-b border-gray-900/10 pb-12">
-						<h2 className="text-base font-semibold leading-7 text-gray-900">
-							Create a group chat
-						</h2>
-						<p className="mt-1 text-sm leading-6 text-gray-600">
-							Create a chat with more than 2 people.
-						</p>
-						<div className="mt-10 flex flex-col gap-y-8">
-							<FormInput control={form.control} label="Name" name="name" />
-							<FormMultiSelect
-								control={form.control}
-								label="Members"
-								name="members"
-								options={users.map((user) => ({
-									value: user.id,
-									label: user.name ?? "Empty",
-								}))}
-							/>
-						</div>
-					</div>
+		<form onSubmit={onSubmit}>
+			<div className="space-y-12">
+				<div className="border-b border-gray-900/10 pb-12">
+					<h2 className="text-base font-semibold leading-7 text-gray-900">
+						Create a group chat
+					</h2>
+					<p className="mt-1 text-sm leading-6 text-gray-600">
+						Create a chat with more than 2 people.
+					</p>
+					<FieldGroup className="mt-10 flex flex-col gap-y-8">
+						<FormInput control={form.control} label="Name" name="name" />
+						<FormMultiSelect
+							control={form.control}
+							label="Members"
+							name="members"
+							options={users.map((user) => ({
+								value: user.id,
+								label: user.name ?? "Empty",
+							}))}
+						/>
+					</FieldGroup>
 				</div>
-				<div className="mt-6 flex items-center justify-end gap-x-6">
-					<Button disabled={form.disabledSubmit} type="submit">
-						Create
-					</Button>
-				</div>
-			</form>
-		</Form>
+			</div>
+			<div className="mt-6 flex items-center justify-end gap-x-6">
+				<Button disabled={form.disabledSubmit} type="submit">
+					Create
+				</Button>
+			</div>
+		</form>
 	);
 };
 

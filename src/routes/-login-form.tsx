@@ -2,7 +2,7 @@
 
 import { FormInput } from "@/components/form/FormInput";
 import { Button } from "@/components/ui/button";
-import { Form } from "@/components/ui/form";
+import { Field, FieldGroup } from "@/components/ui/field";
 import { useValibotForm } from "@/hooks/useValibotForm";
 import { signInSchema } from "@/validators/auth/signInSchema";
 // import { signInWithCredentials } from "@/actions/auth/signInWithCredentials";
@@ -20,8 +20,8 @@ export const LoginForm = () => {
 	});
 
 	return (
-		<Form {...form}>
-			<form onSubmit={onSubmit} className="space-y-6">
+		<form onSubmit={onSubmit}>
+			<FieldGroup>
 				<FormInput control={form.control} name="email" label="E-mail" />
 				<FormInput
 					control={form.control}
@@ -29,10 +29,16 @@ export const LoginForm = () => {
 					label="Password"
 					type="password"
 				/>
-				<Button disabled={form.disabledSubmit} type="submit" className="w-full">
-					Sign in
-				</Button>
-			</form>
-		</Form>
+				<Field>
+					<Button
+						disabled={form.disabledSubmit}
+						type="submit"
+						className="w-full"
+					>
+						Sign in
+					</Button>
+				</Field>
+			</FieldGroup>
+		</form>
 	);
 };

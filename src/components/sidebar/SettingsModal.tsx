@@ -10,7 +10,7 @@ import { useValibotForm } from "@/hooks/useValibotForm";
 import { settingSchema } from "@/validators/settingSchema";
 import { FormInput } from "../form/FormInput";
 import { Button } from "../ui/button";
-import { Form } from "../ui/form";
+import { FieldGroup } from "../ui/field";
 
 type SettingsModalProps = {
 	currentUser: typeof user.$inferSelect;
@@ -38,51 +38,49 @@ const SettingsModal: React.FC<SettingsModalProps> = ({ currentUser }) => {
 	});
 
 	return (
-		<Form {...form}>
-			<form onSubmit={onSubmit}>
-				<div className="border-b border-gray-900/10 pb-6">
-					<div className="flex flex-col gap-y-8">
-						<FormInput control={form.control} label="Name" name="name" />
-						<div>
-							<span className="block text-sm font-medium leading-6 text-gray-900">
-								Photo
-							</span>
-							<div className="mt-2 flex items-center gap-x-3">
-								<Image
-									width={48}
-									height={48}
-									className="rounded-full"
-									src={image || currentUser?.image || "/images/placeholder.jpg"}
-									alt="Avatar"
-								/>
-								<CldUploadButton
-									options={{ maxFiles: 1 }}
-									onSuccess={(result) => {
-										const info = result?.info;
-										if (typeof info === "undefined" || typeof info === "string")
-											return;
+		<form onSubmit={onSubmit}>
+			<div className="border-b border-gray-900/10 pb-6">
+				<FieldGroup className="flex flex-col gap-y-8">
+					<FormInput control={form.control} label="Name" name="name" />
+					<div>
+						<span className="block text-sm font-medium leading-6 text-gray-900">
+							Photo
+						</span>
+						<div className="mt-2 flex items-center gap-x-3">
+							<Image
+								width={48}
+								height={48}
+								className="rounded-full"
+								src={image || currentUser?.image || "/images/placeholder.jpg"}
+								alt="Avatar"
+							/>
+							<CldUploadButton
+								options={{ maxFiles: 1 }}
+								onSuccess={(result) => {
+									const info = result?.info;
+									if (typeof info === "undefined" || typeof info === "string")
+										return;
 
-										form.setValue("image", info.secure_url, {
-											shouldValidate: true,
-										});
-									}}
-									uploadPreset={env.VITE_CLOUDINARY_UPLOAD_PRESET}
-								>
-									<Button variant="secondary" type="button">
-										Change
-									</Button>
-								</CldUploadButton>
-							</div>
+									form.setValue("image", info.secure_url, {
+										shouldValidate: true,
+									});
+								}}
+								uploadPreset={env.VITE_CLOUDINARY_UPLOAD_PRESET}
+							>
+								<Button variant="secondary" type="button">
+									Change
+								</Button>
+							</CldUploadButton>
 						</div>
 					</div>
-				</div>
-				<div className="mt-6 flex items-center justify-end gap-x-6">
-					<Button disabled={form.disabledSubmit} type="submit">
-						Save
-					</Button>
-				</div>
-			</form>
-		</Form>
+				</FieldGroup>
+			</div>
+			<div className="mt-6 flex items-center justify-end gap-x-6">
+				<Button disabled={form.disabledSubmit} type="submit">
+					Save
+				</Button>
+			</div>
+		</form>
 	);
 };
 

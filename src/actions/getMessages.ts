@@ -1,9 +1,9 @@
 import { createServerFn } from "@tanstack/react-start";
-import * as z from "zod/mini";
+import * as v from "valibot";
 import { db } from "@/drizzle";
 
 const getMessages = createServerFn()
-	.inputValidator(z.int())
+	.inputValidator(v.pipe(v.number(), v.integer()))
 	.handler(async ({ data: conversationId }) => {
 		try {
 			const messages = await db.query.message.findMany({

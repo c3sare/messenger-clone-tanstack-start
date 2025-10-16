@@ -1,10 +1,10 @@
 import { createServerFn } from "@tanstack/react-start";
-import * as z from "zod/mini";
+import * as v from "valibot";
 import { db } from "@/drizzle";
 import getCurrentUser from "./getCurrentUser";
 
 const getConversationById = createServerFn()
-	.inputValidator(z.int())
+	.inputValidator(v.pipe(v.number(), v.integer()))
 	.handler(async ({ data: conversationId }) => {
 		try {
 			const currentUser = await getCurrentUser();

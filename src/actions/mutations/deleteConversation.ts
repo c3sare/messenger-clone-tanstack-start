@@ -3,14 +3,14 @@
 import { redirect } from "@tanstack/react-router";
 import { createServerFn } from "@tanstack/react-start";
 import { eq } from "drizzle-orm";
-import * as z from "zod/mini";
+import * as v from "valibot";
 import { db } from "@/drizzle";
 import { conversation } from "@/drizzle/schema";
 import { pusherServer } from "@/lib/pusher";
 import getCurrentUser from "../getCurrentUser";
 
 export const deleteConversation = createServerFn()
-	.inputValidator(z.number())
+	.inputValidator(v.number())
 	.handler(async ({ data: conversationId }) => {
 		const currentUser = await getCurrentUser();
 

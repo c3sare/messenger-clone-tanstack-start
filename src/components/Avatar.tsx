@@ -3,12 +3,12 @@
 import { Image } from "@unpic/react";
 import { useShallow } from "zustand/shallow";
 import useActiveList from "@/stores/useActiveList";
-import { FullConversationType } from "@/types";
+import type { FullConversationType } from "@/types";
 
 interface AvatarProps {
 	user:
-		| FullConversationType["messages"][number]["sender"]
-		| FullConversationType["users"][number];
+		| FullConversationType["message"][number]["sender"]
+		| FullConversationType["user"][number];
 }
 
 const Avatar: React.FC<AvatarProps> = ({ user }) => {

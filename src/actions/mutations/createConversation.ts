@@ -1,6 +1,5 @@
 import { createServerFn } from "@tanstack/react-start";
 import { and, eq, inArray, isNull, or, sql } from "drizzle-orm";
-import { revalidatePath } from "next/cache";
 import { db } from "@/drizzle";
 import { conversation, conversationUser } from "@/drizzle/schema";
 import { pusherServer } from "@/lib/pusher";
@@ -45,8 +44,6 @@ export const createConversation = createServerFn()
 				"conversation:new",
 				newConversation,
 			);
-
-			revalidatePath("/conversations", "layout");
 
 			return newConversation;
 		}
@@ -112,8 +109,6 @@ export const createConversation = createServerFn()
 			"conversation:new",
 			createdConversation,
 		);
-
-		revalidatePath("/conversations", "layout");
 
 		return { ...newConversation, users };
 	});

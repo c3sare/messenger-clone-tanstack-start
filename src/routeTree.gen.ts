@@ -15,6 +15,7 @@ import { Route as ApplicationConversationsRouteRouteImport } from './routes/_app
 import { Route as ApplicationConversationsIndexRouteImport } from './routes/_application/conversations/index'
 import { Route as ApiPusherSplatRouteImport } from './routes/api/pusher/$'
 import { Route as ApiAuthSplatRouteImport } from './routes/api/auth/$'
+import { Route as ApplicationConversationsConversationIdRouteImport } from './routes/_application/conversations/$conversationId'
 import { Route as ApiConversationsChar123conversationIdChar125SeenRouteImport } from './routes/api/conversations/{$conversationId}/seen'
 
 const IndexRoute = IndexRouteImport.update({
@@ -49,6 +50,12 @@ const ApiAuthSplatRoute = ApiAuthSplatRouteImport.update({
   path: '/api/auth/$',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ApplicationConversationsConversationIdRoute =
+  ApplicationConversationsConversationIdRouteImport.update({
+    id: '/$conversationId',
+    path: '/$conversationId',
+    getParentRoute: () => ApplicationConversationsRouteRoute,
+  } as any)
 const ApiConversationsChar123conversationIdChar125SeenRoute =
   ApiConversationsChar123conversationIdChar125SeenRouteImport.update({
     id: '/api/conversations/{$conversationId}/seen',
@@ -60,6 +67,7 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/conversations': typeof ApplicationConversationsRouteRouteWithChildren
   '/$': typeof ApplicationSplatRoute
+  '/conversations/$conversationId': typeof ApplicationConversationsConversationIdRoute
   '/api/auth/$': typeof ApiAuthSplatRoute
   '/api/pusher/$': typeof ApiPusherSplatRoute
   '/conversations/': typeof ApplicationConversationsIndexRoute
@@ -68,6 +76,7 @@ export interface FileRoutesByFullPath {
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/$': typeof ApplicationSplatRoute
+  '/conversations/$conversationId': typeof ApplicationConversationsConversationIdRoute
   '/api/auth/$': typeof ApiAuthSplatRoute
   '/api/pusher/$': typeof ApiPusherSplatRoute
   '/conversations': typeof ApplicationConversationsIndexRoute
@@ -78,6 +87,7 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/_application/conversations': typeof ApplicationConversationsRouteRouteWithChildren
   '/_application/$': typeof ApplicationSplatRoute
+  '/_application/conversations/$conversationId': typeof ApplicationConversationsConversationIdRoute
   '/api/auth/$': typeof ApiAuthSplatRoute
   '/api/pusher/$': typeof ApiPusherSplatRoute
   '/_application/conversations/': typeof ApplicationConversationsIndexRoute
@@ -89,6 +99,7 @@ export interface FileRouteTypes {
     | '/'
     | '/conversations'
     | '/$'
+    | '/conversations/$conversationId'
     | '/api/auth/$'
     | '/api/pusher/$'
     | '/conversations/'
@@ -97,6 +108,7 @@ export interface FileRouteTypes {
   to:
     | '/'
     | '/$'
+    | '/conversations/$conversationId'
     | '/api/auth/$'
     | '/api/pusher/$'
     | '/conversations'
@@ -106,6 +118,7 @@ export interface FileRouteTypes {
     | '/'
     | '/_application/conversations'
     | '/_application/$'
+    | '/_application/conversations/$conversationId'
     | '/api/auth/$'
     | '/api/pusher/$'
     | '/_application/conversations/'
@@ -165,6 +178,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiAuthSplatRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/_application/conversations/$conversationId': {
+      id: '/_application/conversations/$conversationId'
+      path: '/$conversationId'
+      fullPath: '/conversations/$conversationId'
+      preLoaderRoute: typeof ApplicationConversationsConversationIdRouteImport
+      parentRoute: typeof ApplicationConversationsRouteRoute
+    }
     '/api/conversations/{$conversationId}/seen': {
       id: '/api/conversations/{$conversationId}/seen'
       path: '/api/conversations/{$conversationId}/seen'
@@ -176,11 +196,14 @@ declare module '@tanstack/react-router' {
 }
 
 interface ApplicationConversationsRouteRouteChildren {
+  ApplicationConversationsConversationIdRoute: typeof ApplicationConversationsConversationIdRoute
   ApplicationConversationsIndexRoute: typeof ApplicationConversationsIndexRoute
 }
 
 const ApplicationConversationsRouteRouteChildren: ApplicationConversationsRouteRouteChildren =
   {
+    ApplicationConversationsConversationIdRoute:
+      ApplicationConversationsConversationIdRoute,
     ApplicationConversationsIndexRoute: ApplicationConversationsIndexRoute,
   }
 

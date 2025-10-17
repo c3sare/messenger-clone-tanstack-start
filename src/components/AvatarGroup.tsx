@@ -1,10 +1,10 @@
 "use client";
 
-import Image from "next/image";
-import { FullConversationType } from "@/types";
+import { Image } from "@unpic/react";
+import type { FullConversationType } from "@/types";
 
 interface AvatarGroupProps {
-	users?: FullConversationType["users"];
+	users?: FullConversationType["user"];
 }
 
 const AvatarGroup: React.FC<AvatarGroupProps> = ({ users }) => {
@@ -27,8 +27,8 @@ const AvatarGroup: React.FC<AvatarGroupProps> = ({ users }) => {
 				>
 					<Image
 						alt="Avatar"
-						fill
 						src={user?.image || "/images/placeholder.jpg"}
+						layout="fullWidth"
 					/>
 				</div>
 			))}

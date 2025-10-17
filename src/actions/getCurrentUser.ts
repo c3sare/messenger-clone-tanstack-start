@@ -1,8 +1,9 @@
+import { createServerFn } from "@tanstack/react-start";
 import { getRequest } from "@tanstack/react-start/server";
 import { db } from "@/drizzle";
 import { auth } from "@/lib/auth";
 
-const getCurrentUser = async () => {
+const getCurrentUser = createServerFn().handler(async () => {
 	try {
 		const session = await auth.api.getSession(getRequest());
 
@@ -25,6 +26,6 @@ const getCurrentUser = async () => {
 		console.error(error);
 		return null;
 	}
-};
+});
 
 export default getCurrentUser;
